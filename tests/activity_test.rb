@@ -21,21 +21,45 @@ class ActivityTest < Test::Unit::TestCase
   # - start 1724
   # - start 0322
   # - start 0004
-  # - start 0526655
+  # - start 05260655
   # - start 202506220536
 
-  def test_new_hhmm_start_hour_set
-    cut = Activity.new("1724", nil)
+  def setup
+    @zero_month_full_day = '05260655'
+    @full_hour_full_min = '1724'
+    @zero_hour_full_min = '0322'
+    @zero_hour_zero_min = '0004'
+  end
+
+
+  def test_new_full_hour_full_min_start_hour_set
+    cut = Activity.new(@full_hour_full_min, nil)
 
     assert_equal(17, cut.start.hour)
   end
 
-  def test_new_hhmm_start_min_set
-    cut = Activity.new("1724", nil)
+  def test_new_full_hour_full_min_start_min_set
+    cut = Activity.new(@full_hour_full_min, nil)
 
     assert_equal(24, cut.start.min)
   end
 
-  
-  
+  def test_new_zero_hour_full_min_start_hour_set
+    cut = Activity.new(@zero_hour_full_min, nil)
+
+    assert_equal(3, cut.start.hour)
+  end
+
+  def test_new_zero_hour_zero_min_start_hour_set
+    cut = Activity.new(@zero_hour_zero_min, nil)
+
+    assert_equal(0, cut.start.hour)
+  end
+
+  def test_new_zero_hour_zero_min_start_min_set
+    cut = Activity.new(@zero_hour_zero_min, nil)
+
+    assert_equal(4, cut.start.min)
+  end
+
 end
