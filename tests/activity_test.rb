@@ -62,4 +62,15 @@ class ActivityTest < Test::Unit::TestCase
     assert_equal(4, cut.start.min)
   end
 
+  def test_new_zero_month_full_day_start_month_set
+    cut = Activity.new(@zero_month_full_day, nil)
+
+    assert_equal(5, cut.start.month)
+  end
+
+  def test_new_zero_month_full_day_start_day_set
+    cut = Activity.new(@zero_month_full_day, nil)
+
+    assert_equal(26, cut.start.day)
+  end
 end
