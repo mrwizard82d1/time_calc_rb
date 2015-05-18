@@ -1,2 +1,5 @@
+# Ignore ReSharper specific files
+.idea/workspace.xml
+
 # Ignore backup files
 *~
