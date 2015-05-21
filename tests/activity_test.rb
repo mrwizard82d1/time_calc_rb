@@ -74,6 +74,18 @@ context 'full hours and minutes' do
     should 'have correct year' do
       assert_equal(2025, @cut.start.year)
     end
+    should 'have correct month' do
+      assert_equal(6, @cut.start.month)
+    end
+    should 'have correct day' do
+      assert_equal(22, @cut.start.day)
+    end
+    should 'have correct hour' do
+      assert_equal(5, @cut.start.hour)
+    end
+    should 'have correct minute' do
+      assert_equal(36, @cut.start.min)
+    end
   end
 end
 
