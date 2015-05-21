@@ -1,10 +1,10 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'shoulda'
 
 require 'time_calc/activity'
 
 
-class ActivityTest < Test::Unit::TestCase
+class ActivityTest < Minitest::Test
   # Test ideas
   # - start 1724
   # - start 0322
