@@ -65,5 +65,15 @@ context 'full hours and minutes' do
       assert_equal(55, @cut.start.min)
     end
   end
+
+  context 'full year, month, day, hour, minute' do
+    setup do
+      @cut = TimeCalc::Activity.new('202506220536', nil)
+    end
+
+    should 'have correct year' do
+      assert_equal(2025, @cut.start.year)
+    end
+  end
 end
 

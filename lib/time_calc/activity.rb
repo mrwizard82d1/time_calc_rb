@@ -21,6 +21,8 @@ module TimeCalc
         start_sec = 0
         @start = Time.new(start_year, start_month, start_day,
                           start_hour, start_min, start_sec)
+      elsif start_text.size == 12
+        @start = Time.new
       end
     end
   end
