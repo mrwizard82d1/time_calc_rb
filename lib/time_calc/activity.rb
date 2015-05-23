@@ -1,6 +1,7 @@
 module TimeCalc
   class Activity
     attr_reader :start
+    attr_reader :project
 
     def initialize(start_text, _project)
       today = Time.new

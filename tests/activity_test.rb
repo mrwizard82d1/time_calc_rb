@@ -87,5 +87,15 @@ context 'full hours and minutes' do
       assert_equal(36, @cut.start.min)
     end
   end
+
+  context 'has project' do
+    setup do
+      @cut = TimeCalc::Activity.new('1702', 'time_sheet')
+    end
+
+    should 'have correct project' do
+      assert_equal('time_sheet', @cut.project)
+    end
+  end
 end
 
