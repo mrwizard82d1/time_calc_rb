@@ -3,7 +3,7 @@ module TimeCalc
     attr_reader :start
     attr_reader :project
 
-    def initialize(start_text, _project)
+    def initialize(start_text, project)
       today = Time.new
       # "Parse" the starting time text using a regular expression:
       # Optional 4 digit year (but only if I have 8 digits afterward)
@@ -17,6 +17,7 @@ module TimeCalc
       raise ArgumentError, "Invalid starting time format: #{start_text}." unless match.size > 0
       @start = Time.new(match[1] || today.year, match[2] || today.month, match[3] || today.day,
                         match[4], match[5], 0)
+      @project = project
     end
   end
 end
