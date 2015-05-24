@@ -14,7 +14,7 @@ class ActivityTest < Minitest::Test
 
 context 'full hours and minutes' do
     setup do
-      @cut = TimeCalc::Activity.new('1724', nil)
+      @cut = TimeCalc::Activity.new('1724', "don't care")
     end
     should 'have the correct start hour' do
       assert_equal(17, @cut.start.hour)
@@ -26,7 +26,7 @@ context 'full hours and minutes' do
 
   context 'zero hour and full minutes' do
     setup do
-      @cut = TimeCalc::Activity.new('0322', nil)
+      @cut = TimeCalc::Activity.new('0322', "don't care")
     end
     should 'have the correct start hour' do
       assert_equal(3, @cut.start.hour)
@@ -38,7 +38,7 @@ context 'full hours and minutes' do
 
   context 'zero hour and zero minute' do
     setup do
-      @cut = TimeCalc::Activity.new('0004', nil)
+      @cut = TimeCalc::Activity.new('0004', "don't care")
     end
     should 'have the correct start hour' do
       assert_equal(0, @cut.start.hour)
@@ -50,7 +50,7 @@ context 'full hours and minutes' do
 
   context 'zero month and full day' do
     setup do
-      @cut = TimeCalc::Activity.new('05260655', nil)
+      @cut = TimeCalc::Activity.new('05260655', "don't care")
     end
     should 'have the correct start month' do
       assert_equal(5, @cut.start.month)
@@ -68,7 +68,7 @@ context 'full hours and minutes' do
 
   context 'full year, month, day, hour, minute' do
     setup do
-      @cut = TimeCalc::Activity.new('202506220536', nil)
+      @cut = TimeCalc::Activity.new('202506220536', "don't care")
     end
 
     should 'have correct year' do
@@ -95,6 +95,12 @@ context 'full hours and minutes' do
 
     should 'have correct project' do
       assert_equal('time_sheet', @cut.project)
+    end
+  end
+
+  context 'has no project' do
+    should 'throw argument error' do
+      assert_raises(ArgumentError) { TimeCalc::Activity.new('2131', nil) }
     end
   end
 end

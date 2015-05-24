@@ -4,6 +4,7 @@ module TimeCalc
     attr_reader :project
 
     def initialize(start_text, project)
+      raise ArgumentError, 'Project required.' unless project
       today = Time.new
       # "Parse" the starting time text using a regular expression:
       # Optional 4 digit year (but only if I have 8 digits afterward)
