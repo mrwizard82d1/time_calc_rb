@@ -4,7 +4,10 @@ module TimeCalc
     attr_reader :project
 
     def self.summarize(activities)
-      return { activities[0].project => 0.25 }
+      result = activities.reduce(Hash.new(0)) do
+        | accum, activity |
+        accum[activity.project] += activity.duration 
+      end
     end
 
     def initialize(start_text, project)

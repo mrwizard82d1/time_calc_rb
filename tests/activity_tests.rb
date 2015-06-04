@@ -115,5 +115,18 @@ class ActivityTests < Minitest::Test
     end
   end
 
+  context 'three activities one project' do
+    setup do
+      @activities = [TimeCalc::Activity.new('1332', 'depraedo'),
+                     TimeCalc::Activity.new('1347', 'depraedo'),
+                     TimeCalc::Activity.new('1402', 'depraedo')]
+    end
+
+    should 'have correct summary' do
+      assert_equal({'depraedo' => 0.50},
+                   TimeCalc::Activity.summarize(@activities))
+    end
+  end
+
 end
 
