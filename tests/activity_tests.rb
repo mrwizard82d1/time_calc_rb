@@ -4,7 +4,7 @@ require 'shoulda'
 require 'time_calc/activity'
 
 
-class ActivityTest < Minitest::Test
+class ActivityTests < Minitest::Test
   # Test ideas
   # - start 1724
   # - start 0322
@@ -12,7 +12,7 @@ class ActivityTest < Minitest::Test
   # - start 05260655
   # - start 202506220536
 
-context 'full hours and minutes' do
+  context 'full hours and minutes' do
     setup do
       @cut = TimeCalc::Activity.new('1724', "don't care")
     end
@@ -103,5 +103,17 @@ context 'full hours and minutes' do
       assert_raises(ArgumentError) { TimeCalc::Activity.new('2131', nil) }
     end
   end
+
+  context 'exactly two activities' do
+    setup do
+      @activities = [TimeCalc::Activity.new('1332', "don't care"),
+                     TimeCalc::Activity.new('1347', "don't care")]
+    end
+    should 'have correct duration' do
+      assert_equal({"don't care" => 0.25},
+                   TimeCalc::Activity.summarize(@activities))  
+    end
+  end
+
 end
 

@@ -3,6 +3,9 @@ module TimeCalc
     attr_reader :start
     attr_reader :project
 
+    def self.summarize(activities)
+    end
+
     def initialize(start_text, project)
       raise ArgumentError, 'Project required.' unless project
       today = Time.new
