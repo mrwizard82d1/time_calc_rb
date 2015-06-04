@@ -1,3 +1,4 @@
+require 'active_support/time'
 require 'minitest/autorun'
 require 'shoulda'
 
@@ -17,10 +18,10 @@ class ActivityTests < Minitest::Test
       @cut = TimeCalc::Activity.new('1724', "don't care")
     end
     should 'have the correct start hour' do
-      assert_equal(17, @cut.start.hour)
+      assert_equal(17, @cut.starts_at.hour)
     end
     should 'have correct start minute' do
-      assert_equal(24, @cut.start.min)
+      assert_equal(24, @cut.starts_at.min)
     end
   end
 
@@ -29,10 +30,10 @@ class ActivityTests < Minitest::Test
       @cut = TimeCalc::Activity.new('0322', "don't care")
     end
     should 'have the correct start hour' do
-      assert_equal(3, @cut.start.hour)
+      assert_equal(3, @cut.starts_at.hour)
     end
     should 'have correct start minute' do
-      assert_equal(22, @cut.start.min)
+      assert_equal(22, @cut.starts_at.min)
     end
   end
 
@@ -41,10 +42,10 @@ class ActivityTests < Minitest::Test
       @cut = TimeCalc::Activity.new('0004', "don't care")
     end
     should 'have the correct start hour' do
-      assert_equal(0, @cut.start.hour)
+      assert_equal(0, @cut.starts_at.hour)
     end
     should 'have correct start minute' do
-      assert_equal(4, @cut.start.min)
+      assert_equal(4, @cut.starts_at.min)
     end
   end
 
@@ -53,16 +54,16 @@ class ActivityTests < Minitest::Test
       @cut = TimeCalc::Activity.new('05260655', "don't care")
     end
     should 'have the correct start month' do
-      assert_equal(5, @cut.start.month)
+      assert_equal(5, @cut.starts_at.month)
     end
     should 'have correct start day' do
-      assert_equal(26, @cut.start.day)
+      assert_equal(26, @cut.starts_at.day)
     end
     should 'have the correct start hour' do
-      assert_equal(6, @cut.start.hour)
+      assert_equal(6, @cut.starts_at.hour)
     end
     should 'have correct start minute' do
-      assert_equal(55, @cut.start.min)
+      assert_equal(55, @cut.starts_at.min)
     end
   end
 
@@ -72,19 +73,29 @@ class ActivityTests < Minitest::Test
     end
 
     should 'have correct year' do
-      assert_equal(2025, @cut.start.year)
+      assert_equal(2025, @cut.starts_at.year)
     end
     should 'have correct month' do
-      assert_equal(6, @cut.start.month)
+      assert_equal(6, @cut.starts_at.month)
     end
     should 'have correct day' do
-      assert_equal(22, @cut.start.day)
+      assert_equal(22, @cut.starts_at.day)
     end
     should 'have correct hour' do
-      assert_equal(5, @cut.start.hour)
+      assert_equal(5, @cut.starts_at.hour)
     end
     should 'have correct minute' do
-      assert_equal(36, @cut.start.min)
+      assert_equal(36, @cut.starts_at.min)
+    end
+  end
+
+  context 'duration is end - start' do
+    setup do
+      @cut = TimeCalc::Activity.new('1220', "don't care")
+    end
+    should 'have correct duration' do
+      @cut.ends_at += 29.minutes # relies on active_support/time
+      assert_equal(29.minutes, @cut.duration)
     end
   end
 
@@ -109,8 +120,19 @@ class ActivityTests < Minitest::Test
       @activities = [TimeCalc::Activity.new('1332', "don't care"),
                      TimeCalc::Activity.new('1347', "don't care")]
     end
-    should 'have correct duration' do
-      assert_equal({"don't care" => 0.25},
+    context 'sequence from two activities' do
+      setup do
+        @sequence = TimeCalc::Activity.make_sequence(@activities)
+      end
+      should 'end of first in sequence is start of second' do
+        assert_equal(@sequence[0].ends_at, @activities[1].starts_at)
+      end
+      should 'have correct duration' do
+        assert_equal(15.minutes, @sequence[0].duration)
+      end
+    end
+    should 'have correct summary' do
+      assert_equal({"don't care" => 0.25.hours},
                    TimeCalc::Activity.summarize(@activities))  
     end
   end
@@ -123,7 +145,7 @@ class ActivityTests < Minitest::Test
     end
 
     should 'have correct summary' do
-      assert_equal({'depraedo' => 0.50},
+      assert_equal({'depraedo' => 0.50.hours},
                    TimeCalc::Activity.summarize(@activities))
     end
   end

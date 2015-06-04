@@ -1,13 +1,30 @@
+module Enumerable
+  def drop_last(n = 1)
+    self.take(self.size - n)
+  end
+end
+
+
 module TimeCalc
   class Activity
-    attr_reader :start
+    attr_reader :starts_at
+    attr_accessor :ends_at
     attr_reader :project
 
-    def self.summarize(activities)
-      result = activities.reduce(Hash.new(0)) do
-        | accum, activity |
-        accum[activity.project] += activity.duration 
+    def self.make_sequence(activities)
+      activities.drop_last.zip(activities.drop(1)).map do
+        | activity, successor |
+        activity.ends_at = successor.starts_at
+        activity
       end
+    end
+    def self.summarize(activities)
+      result = Activity.make_sequence(activities).reduce(Hash.new(0)) do
+        | summary, activity |
+        summary[activity.project] += activity.duration
+        summary
+      end
+      return result
     end
 
     def initialize(start_text, project)
@@ -23,9 +40,18 @@ module TimeCalc
       time_stamp_pattern = /(\d{4}(?=\d{8}))?(\d{2})?(\d{2})?(\d{2})(\d{2})/
       match = time_stamp_pattern.match(start_text)
       raise ArgumentError, "Invalid starting time format: #{start_text}." unless match.size > 0
-      @start = Time.new(match[1] || today.year, match[2] || today.month, match[3] || today.day,
-                        match[4], match[5], 0)
+      @starts_at = Time.new(match[1] || today.year, match[2] || today.month, match[3] || today.day,
+                                   match[4], match[5], 0)
+      @ends_at = @starts_at
       @project = project
+    end
+
+    def duration()
+      return @ends_at - @starts_at
+    end
+
+    def to_s()
+      "#{self.class.name}(starts_at=#{@starts_at}, ends_at=#{ends_at})"
     end
   end
 end
