@@ -117,38 +117,46 @@ class ActivityTests < Minitest::Test
 
   context 'exactly two activities' do
     setup do
-      @activities = [TimeCalc::Activity.new('1332', "don't care"),
-                     TimeCalc::Activity.new('1347', "don't care")]
+      @two_activities_one_project = [TimeCalc::Activity.new('1332', "don't care"), TimeCalc::Activity.new('1347',
+                                                                                                          "don't care")]
     end
     context 'sequence from two activities' do
       setup do
-        @sequence = TimeCalc::Activity.make_sequence(@activities)
+        @sequence = TimeCalc::Activity.make_sequence(@two_activities_one_project)
       end
       should 'end of first in sequence is start of second' do
-        assert_equal(@sequence[0].ends_at, @activities[1].starts_at)
+        assert_equal(@sequence[0].ends_at, @two_activities_one_project[1].starts_at)
       end
       should 'have correct duration' do
         assert_equal(15.minutes, @sequence[0].duration)
       end
     end
+    context 'two activities two projects' do
+      should 'have correct summary' do
+        two_activities_two_projects = [TimeCalc::Activity.new('1335', 'publicus'),
+                                       TimeCalc::Activity.new('1420', 'praedium'),
+                                       TimeCalc::Activity.new('1435', "don't care")]
+        assert_equal({'praedium' => 0.25.hours, 'publicus' => 0.75.hours},
+                     TimeCalc::Activity.summarize(two_activities_two_projects))
+      end
+    end
     should 'have correct summary' do
       assert_equal({"don't care" => 0.25.hours},
-                   TimeCalc::Activity.summarize(@activities))  
+                   TimeCalc::Activity.summarize(@two_activities_one_project))
     end
   end
 
   context 'three activities one project' do
     setup do
-      @activities = [TimeCalc::Activity.new('1332', 'depraedo'),
+      @two_activities_one_project = [TimeCalc::Activity.new('1332', 'depraedo'),
                      TimeCalc::Activity.new('1347', 'depraedo'),
                      TimeCalc::Activity.new('1402', 'depraedo')]
     end
 
     should 'have correct summary' do
       assert_equal({'depraedo' => 0.50.hours},
-                   TimeCalc::Activity.summarize(@activities))
+                   TimeCalc::Activity.summarize(@two_activities_one_project))
     end
   end
-
 end
 
