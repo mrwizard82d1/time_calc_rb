@@ -1,3 +1,6 @@
+# Ignore time files.
+time.txt
+
 # Ignore ReSharper specific files
 .idea/workspace.xml
 
