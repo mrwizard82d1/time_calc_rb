@@ -1,3 +1,6 @@
+require 'active_support/time'
+
+
 module Enumerable
   def drop_last(n = 1)
     self.take(self.size - n)
@@ -19,11 +22,34 @@ module TimeCalc
       end
     end
     def self.summarize(activities)
-      result = Activity.make_sequence(activities).reduce(Hash.new(0)) do
+      raw_result = Activity.make_sequence(activities).reduce(Hash.new(0)) do
         | summary, activity |
         summary[activity.project] += activity.duration
         summary
       end
+      result = raw_result.reduce(Hash.new()) do
+        | so_far, (project, duration) |
+        reduced_duration = duration
+        reduced_duration -= 1.hour while (reduced_duration > 1.hour)
+        hours = duration - reduced_duration
+        rounded_duration = case
+                             when (0.minutes <= reduced_duration && reduced_duration <= 7.minutes + 30.seconds)
+                               0.minutes
+                             when (7.minutes + 30.seconds < reduced_duration &&
+                                 reduced_duration <= 22.minutes + 30.seconds)
+                               15.minutes
+                             when (22.minutes + 30.seconds < reduced_duration &&
+                                   reduced_duration <= 37.minutes + 30.seconds)
+                               30.minutes
+                             when (37.minutes + 30.seconds < reduced_duration &&
+                                   reduced_duration <= 52.minutes + 30.seconds)
+                               45.minutes
+                             when (52.minutes + 30.seconds < reduced_duration && reduced_duration < 60.minutes)
+                               60.minutes
+                           end
+        so_far[project] = hours + rounded_duration
+        so_far
+        end
       return result
     end
 
