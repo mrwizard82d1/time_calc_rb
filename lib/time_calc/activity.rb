@@ -44,7 +44,7 @@ module TimeCalc
                              when (37.minutes + 30.seconds < reduced_duration &&
                                    reduced_duration <= 52.minutes + 30.seconds)
                                45.minutes
-                             when (52.minutes + 30.seconds < reduced_duration && reduced_duration < 60.minutes)
+                             when (52.minutes + 30.seconds < reduced_duration && reduced_duration <= 60.minutes)
                                60.minutes
                            end
         so_far[project] = hours + rounded_duration

@@ -200,6 +200,10 @@ class ActivityTests < Minitest::Test
       projects = [TimeCalc::Activity.new('1348', @project), TimeCalc::Activity.new('1441', @dont_care)]
       assert_equal(1.hour, TimeCalc::Activity.summarize(projects)[@project])
     end
+    should 'correctly round 1.hour to 1.hour' do
+      projects = [TimeCalc::Activity.new('1503', @project), TimeCalc::Activity.new('1603', @dont_care)]
+      assert_equal(1.hour, TimeCalc::Activity.summarize(projects)[@project])
+    end
   end
 end
 
